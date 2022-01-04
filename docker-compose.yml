@@ -2,15 +2,15 @@ version: '3.3'
 services:
   # FRONTEND
   ##########
-  test-frontend:
-    image: test-frontend
-    container_name: test-frontend
-    build:
-      dockerfile: ./local-dev/Dockerfile.frontend
-    volumes:
-      - ./frontend:/app
-    ports:
-      - 3000:3000
+  # test-frontend:
+  #   image: test-frontend
+  #   container_name: test-frontend
+  #   build:
+  #     dockerfile: ./local-dev/Dockerfile.frontend
+  #   volumes:
+  #     - ./frontend:/app
+  #   ports:
+  #     - 3000:3000
   
   # BACKEND
   ##########
@@ -56,5 +56,7 @@ services:
       - ./local-dev/volumes/pgadmin:/var/lib/pgadmin
     ports:
       - 4444:80
+    logging:
+      driver: none
     depends_on:
       - test-postgres
