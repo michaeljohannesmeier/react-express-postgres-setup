@@ -1,0 +1,60 @@
+version: '3.3'
+services:
+  # FRONTEND
+  ##########
+  test-frontend:
+    image: test-frontend
+    container_name: test-frontend
+    build:
+      dockerfile: ./local-dev/Dockerfile.frontend
+    volumes:
+      - ./frontend:/app
+    ports:
+      - 3000:3000
+  
+  # BACKEND
+  ##########
+  test-backend:
+    image: test-backend
+    container_name: test-backend
+    build:
+      dockerfile: ./local-dev/Dockerfile.backend
+    volumes:
+      - ./backend:/app
+    ports:
+      - 3001:3001
+
+  # POSTGRES
+  ##########
+  test-postgres:
+    image: test-postgres
+    container_name: test-postgres
+    build:
+      dockerfile: ./local-dev/Dockerfile.postgres
+    volumes:
+      - ./local-dev/db/:/docker-entrypoint-initdb.d/
+    ports:
+      - 5432:5432
+    env_file:
+      - ./.env
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 10s
+      timeout: 9s
+      retries: 3
+
+  # PGADMIN
+  #########
+  test-pgadmin:
+    image: test-pgadmin
+    container_name: test-pgadmin
+    build:
+      dockerfile: ./local-dev/Dockerfile.pgadmin
+    env_file:
+      - ./.env
+    volumes:
+      - ./local-dev/volumes/pgadmin:/var/lib/pgadmin
+    ports:
+      - 4444:80
+    depends_on:
+      - test-postgres

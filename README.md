@@ -1,1 +1,1 @@
-# react-express-postgres-setup
+# react-express-mongodb-setup
